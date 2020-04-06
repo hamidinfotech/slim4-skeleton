@@ -1,0 +1,8 @@
+.idea/
+vendor/
+node_modules/
+config/env.php
+tmp/cache/
+tmp/log/
+.env
+docker-compose.dev.yml

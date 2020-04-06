@@ -1,0 +1,61 @@
+version: "3.7"
+services:
+  my-project:
+    build:
+      args:
+        user: hamid
+        uid: 1010
+      context: ./
+      dockerfile: ./docker/php7/Dockerfile
+    image: my-project
+    container_name: my-project-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      my-project:
+        ipv4_address: 172.20.0.2
+
+  nginx:
+    image: nginx:alpine
+    container_name: my-project-nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d/
+      - /srv/ssl/:/srv/ssl:ro
+    networks:
+      my-project:
+        ipv4_address: 172.20.0.3
+
+  db:
+    image: mysql:${MYSQL_VERSION}
+    container_name: my-project-db
+    restart: unless-stopped
+    ports:
+      - 2106:2106
+    expose:
+      - 2106
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - my-project-db-data:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      my-project:
+        ipv4_address: 172.20.0.4
+
+volumes:
+  my-project-db-data:
+
+networks:
+  my-project:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -20,14 +20,26 @@ I separate docker compose file for development environment.
 
 In production use docker-compose.yml and for development use docker-compose.dev.yml
 
-Use example to create docker-compose.dev.yml
+Use example file to create docker-compose.dev.yml
 ```
-cp docker-compose.dev.example.yml docker-compos.dev.yml
+cp docker-compose.dev.example.yml docker-compose.dev.yml
 ```
 
-Build the my-project image
+Create .env file and update the MYSQL_ROOT_PASSWORD key in the file
 ```
-docker-compose build my-project
+cp .env.example .env
+```
+
+Create project settings file in config directory
+```
+cp config/env.example.php config/env.php
+```
+
+\* **Before running containers, you may want to change `my-project` string in docker compose files.**
+
+Build the app image
+```
+docker-compose -f docker-compose.dev.yml build app
 ```
 
 When the build is finished, run the containers in background mode with:
@@ -37,18 +49,31 @@ docker-compose -f docker-compose.dev.yml up -d
 
 Install the application dependencies
 ```
-docker-compose exec my-project composer install
-docker-compose exec my-project npm install
-```
-
-You may want to enter the container using the following command and run your project commands as well:
-```
-docker exec -it my-project bash
+docker-compose exec app composer install
+docker-compose exec app npm install
 ```
 
 Compile your Sass and Js files using the following scripts:
 ```
-npm run dev
+docker-compose exec app npm run dev
 or
-npm run prod
+docker-compose exec app npm run prod
 ```
+
+\* **Also you can enter the app container using the following command and run your project commands as well:**
+```
+docker exec -it my-project-app bash
+```
+
+Browse to Hello World!
+```
+http://127.0.0.1:8001
+```
+
+## Useful Links
+* [Slim Framework](http://www.slimframework.com/)
+* [PHP-DI](http://php-di.org/)
+* [PHP Standards Recommendations](https://www.php-fig.org/psr/)
+* [Action Domain Responder](https://github.com/pmjones/adr/blob/master/ADR.md)
+* [Laravel Mix](https://laravel-mix.com/)
+* [Daniel's Dev Blog](https://odan.github.io/)

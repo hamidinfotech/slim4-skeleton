@@ -10,8 +10,6 @@ use Slim\Interfaces\CallableResolverInterface;
 
 class ErrorHandler extends SlimErrorHandler
 {
-    private $logger;
-
     public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, LoggerFactory $loggerFactory)
     {
         parent::__construct($callableResolver, $responseFactory);

@@ -16,7 +16,7 @@ This skeleton has been developed base on [this tutorial](https://odan.github.io/
 * Vuejs
 
 ## Setup using docker
-I separate docker compose file for development environment.
+I separated docker compose file for development environment.
 
 In production use docker-compose.yml and for development use docker-compose.dev.yml
 

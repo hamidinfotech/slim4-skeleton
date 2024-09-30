@@ -1,6 +1,6 @@
 {
     "require": {
-        "slim/slim": "4.*",
+        "slim/slim": "^4.14",
         "slim/psr7": "^1.0",
         "slim/http": "^1.0",
         "php-di/php-di": "^6.0",

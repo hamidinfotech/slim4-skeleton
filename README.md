@@ -26,16 +26,16 @@ cp docker-compose.dev.example.yml docker-compose.dev.yml
 ```
 
 Create .env file and update the MYSQL_ROOT_PASSWORD key in the file
+
+**Don't forget to update .env file before building the docker image!**
 ```
 cp .env.example .env
-```
+``` 
 
 Create project settings file in config directory
 ```
 cp config/env.example.php config/env.php
 ```
-
-\* **Before running containers, you may want to change `my-project` string in docker compose files.**
 
 Build the app image
 ```

@@ -1,25 +1,25 @@
-version: "3.7"
+version: "3.8"
 services:
   app:
     build:
       args:
-        user: hamid
+        user: ${CONTAINER_USER_NAME}
         uid: 1010
       context: ./
-      dockerfile: ./docker/php7/Dockerfile
-    image: my-project
-    container_name: my-project-app
+      dockerfile: ./docker/php8/Dockerfile
+    image: ${PROJECT_NAME}
+    container_name: ${PROJECT_NAME}-app
     restart: unless-stopped
     working_dir: /var/www
     volumes:
       - ./:/var/www
     networks:
-      my-project:
+      default:
         ipv4_address: 172.20.0.2
 
   nginx:
     image: nginx:alpine
-    container_name: my-project-nginx
+    container_name: ${PROJECT_NAME}-nginx
     restart: unless-stopped
     ports:
       - 80:80
@@ -29,12 +29,12 @@ services:
       - ./docker/nginx/conf.d:/etc/nginx/conf.d/
       - /srv/ssl/:/srv/ssl:ro
     networks:
-      my-project:
+      default:
         ipv4_address: 172.20.0.3
 
   db:
     image: mysql:${MYSQL_VERSION}
-    container_name: my-project-db
+    container_name: ${PROJECT_NAME}-db
     restart: unless-stopped
     ports:
       - 2106:2106
@@ -43,18 +43,20 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - my-project-db-data:/var/lib/mysql
+      - db-data:/var/lib/mysql
       - ./docker/mysql/conf.d:/etc/mysql/conf.d
     command: --default-authentication-plugin=mysql_native_password
     networks:
-      my-project:
+      default:
         ipv4_address: 172.20.0.4
 
 volumes:
-  my-project-db-data:
+  db-data:
+    name: ${PROJECT_NAME}-db-data
 
 networks:
-  my-project:
+  default:
+    name: ${PROJECT_NAME}
     driver: bridge
     ipam:
       config:
